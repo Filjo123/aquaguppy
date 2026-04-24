@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AquaGuppy — Premium Guppy Fish Store</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --ocean-deep: #0a1628;
+      --ocean-mid: #0d2240;
+      --teal: #00c2b2;
+      --teal-light: #00e5d2;
+      --gold: #f0c040;
+      --coral: #ff6b6b;
+      --white: #f0f6ff;
+      --gray: #8aa0b8;
+      --card-bg: rgba(13, 34, 64, 0.85);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--ocean-deep);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Animated water background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(0,194,178,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(0,100,200,0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at 60% 80%, rgba(0,194,178,0.05) 0%, transparent 40%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Bubbles */
+    .bubbles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .bubble {
+      position: absolute;
+      bottom: -60px;
+      border-radius: 50%;
+      background: rgba(0,194,178,0.15);
+      border: 1px solid rgba(0,194,178,0.3);
+      animation: rise linear infinite;
+    }
+    @keyframes rise {
+      to { transform: translateY(-110vh) translateX(30px); opacity: 0; }
+    }
+
+    /* NAV */
+    nav {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 4rem;
+      border-bottom: 1px solid rgba(0,194,178,0.15);
+      backdrop-filter: blur(10px);
+    }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--teal-light);
+      letter-spacing: -0.5px;
+    }
+    .logo span { color: var(--gold); }
+    nav a {
+      color: var(--gray);
+      text-decoration: none;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--teal-light); }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 5rem 2rem 4rem;
+    }
+    .hero-tag {
+      display: inline-block;
+      background: rgba(0,194,178,0.15);
+      border: 1px solid rgba(0,194,178,0.4);
+      color: var(--teal-light);
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.4rem 1.2rem;
+      border-radius: 100px;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.6s ease both;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      animation: fadeUp 0.6s ease 0.1s both;
+    }
+    .hero h1 em { color: var(--teal-light); font-style: italic; }
+    .hero p {
+      color: var(--gray);
+      font-size: 1.1rem;
+      margin-top: 1rem;
+      animation: fadeUp 0.6s ease 0.2s both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* SEARCH */
+    .search-bar {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      padding: 0 2rem 2.5rem;
+    }
+    .search-bar input {
+      background: var(--card-bg);
+      border: 1px solid rgba(0,194,178,0.25);
+      color: var(--white);
+      padding: 0.85rem 1.5rem;
+      border-radius: 100px 0 0 100px;
+      font-size: 0.95rem;
+      width: 100%;
+      max-width: 400px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-bar input:focus { border-color: var(--teal); }
+    .search-bar input::placeholder { color: var(--gray); }
+    .search-bar button {
+      background: var(--teal);
+      color: var(--ocean-deep);
+      border: none;
+      padding: 0.85rem 1.5rem;
+      border-radius: 0 100px 100px 0;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+    }
+    .search-bar button:hover { background: var(--teal-light); }
+
+    /* GRID */
+    .section {
+      position: relative;
+      z-index: 1;
+      padding: 0 3rem 5rem;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      margin-bottom: 2rem;
+      color: var(--white);
+    }
+    .section-title span { color: var(--teal); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.8rem;
+    }
+
+    /* CARD */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid rgba(0,194,178,0.1);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+      animation: fadeUp 0.5s ease both;
+      cursor: pointer;
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(0,194,178,0.4);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 20px rgba(0,194,178,0.1);
+    }
+    .card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: linear-gradient(135deg, #0d2240, #0a3050);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .card-img .no-img {
+      font-size: 4rem;
+      opacity: 0.4;
+    }
+    .stock-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.7rem;
+      border-radius: 100px;
+    }
+    .stock-badge.in { background: rgba(0,194,178,0.2); color: var(--teal-light); border: 1px solid rgba(0,194,178,0.4); }
+    .stock-badge.out { background: rgba(255,107,107,0.2); color: var(--coral); border: 1px solid rgba(255,107,107,0.4); }
+
+    .card-body { padding: 1.2rem 1.4rem 1.4rem; }
+    .card-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+    .card-desc {
+      font-size: 0.85rem;
+      color: var(--gray);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .price {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+    .price span { font-size: 0.8rem; font-weight: 400; color: var(--gray); }
+    .btn-buy {
+      background: linear-gradient(135deg, var(--teal), #008a7e);
+      color: var(--ocean-deep);
+      border: none;
+      padding: 0.5rem 1.2rem;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .btn-buy:hover { opacity: 0.9; transform: scale(1.03); }
+    .btn-buy:disabled { background: #2a3a4a; color: var(--gray); cursor: not-allowed; transform: none; }
+
+    /* PAGINATION */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 3rem;
+    }
+    .page-btn {
+      background: var(--card-bg);
+      border: 1px solid rgba(0,194,178,0.2);
+      color: var(--gray);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    .page-btn:hover, .page-btn.active {
+      background: var(--teal);
+      color: var(--ocean-deep);
+      border-color: var(--teal);
+      font-weight: 700;
+    }
+    .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    /* EMPTY / LOADING */
+    .state-msg {
+      text-align: center;
+      color: var(--gray);
+      padding: 4rem;
+      font-size: 1.1rem;
+      grid-column: 1 / -1;
+    }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(0,194,178,0.2);
+      border-top-color: var(--teal);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 1rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      backdrop-filter: blur(4px);
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--ocean-mid);
+      border: 1px solid rgba(0,194,178,0.2);
+      border-radius: 20px;
+      padding: 2rem;
+      max-width: 460px;
+      width: 100%;
+      animation: fadeUp 0.3s ease;
+    }
+    .modal h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .modal p { color: var(--gray); font-size: 0.9rem; margin-bottom: 1.5rem; line-height: 1.6; }
+    .modal-price { font-size: 2rem; font-weight: 700; color: var(--gold); margin-bottom: 1.5rem; }
+    .modal-actions { display: flex; gap: 1rem; }
+    .btn-close {
+      background: transparent;
+      border: 1px solid rgba(0,194,178,0.3);
+      color: var(--gray);
+      padding: 0.7rem 1.5rem;
+      border-radius: 100px;
+      cursor: pointer;
+      flex: 1;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    .btn-close:hover { border-color: var(--teal); color: var(--white); }
+    .btn-enquire {
+      background: var(--teal);
+      color: var(--ocean-deep);
+      border: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 100px;
+      cursor: pointer;
+      flex: 1;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: opacity 0.2s;
+    }
+    .btn-enquire:hover { opacity: 0.85; }
+
+    /* FOOTER */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
+      color: var(--gray);
+      font-size: 0.8rem;
+      border-top: 1px solid rgba(0,194,178,0.1);
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .section { padding: 0 1rem 4rem; }
+      .hero { padding: 3rem 1.5rem 2.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bubbles" id="bubbles"></div>
+
+<nav>
+  <div class="logo">Aqua<span>Guppy</span></div>
+  <div style="display:flex;gap:2rem">
+    <a href="index.html">Shop</a>
+    <a href="#footer">Contact</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-tag">🐟 Premium Ornamental Fish</div>
+  <h1>Discover <em>Rare</em><br/>Guppy Collections</h1>
+  <p>Handpicked, healthy, and vibrant — straight to your aquarium</p>
+</section>
+
+<div class="search-bar">
+  <input type="text" id="searchInput" placeholder="Search guppy varieties..." oninput="filterProducts()"/>
+  <button onclick="filterProducts()">Search</button>
+</div>
+
+<section class="section">
+  <div class="section-title">Our <span>Collection</span></div>
+  <div class="grid" id="productGrid">
+    <div class="state-msg"><div class="spinner"></div>Loading fish...</div>
+  </div>
+  <div class="pagination" id="pagination"></div>
+</section>
+
+<footer id="footer">
+  <p>© 2025 AquaGuppy · Premium Guppy Fish Store · All Rights Reserved</p>
+</footer>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <h2 id="modalName"></h2>
+    <div class="modal-price" id="modalPrice"></div>
+    <p id="modalDesc"></p>
+    <div class="modal-actions">
+      <button class="btn-close" onclick="closeModalDirect()">Close</button>
+      <button class="btn-enquire" id="modalEnquire">Enquire on WhatsApp</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const PER_PAGE = 10;
+  let allProducts = [];
+  let filtered = [];
+  let currentPage = 1;
+
+  // Bubbles
+  const bc = document.getElementById('bubbles');
+  for (let i = 0; i < 18; i++) {
+    const b = document.createElement('div');
+    b.className = 'bubble';
+    const size = Math.random() * 20 + 6;
+    b.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;animation-duration:${Math.random()*12+8}s;animation-delay:${Math.random()*10}s;opacity:${Math.random()*0.5+0.1}`;
+    bc.appendChild(b);
+  }
+
+  // Load products
+  async function loadProducts() {
+    try {
+      const res = await fetch('products.json?v=' + Date.now());
+      allProducts = await res.json();
+      filtered = [...allProducts];
+      renderPage(1);
+    } catch (e) {
+      document.getElementById('productGrid').innerHTML = '<div class="state-msg">⚠️ Could not load products. Make sure products.json exists.</div>';
+    }
+  }
+
+  function filterProducts() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    filtered = allProducts.filter(p =>
+      p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q)
+    );
+    renderPage(1);
+  }
+
+  function renderPage(page) {
+    currentPage = page;
+    const start = (page - 1) * PER_PAGE;
+    const items = filtered.slice(start, start + PER_PAGE);
+    const grid = document.getElementById('productGrid');
+
+    if (filtered.length === 0) {
+      grid.innerHTML = '<div class="state-msg">🐠 No fish found matching your search.</div>';
+      document.getElementById('pagination').innerHTML = '';
+      return;
+    }
+
+    grid.innerHTML = items.map((p, i) => `
+      <div class="card" style="animation-delay:${i * 0.06}s" onclick="openModal(${p.id})">
+        <div class="card-img">
+          ${p.image ? `<img src="${p.image}" alt="${p.name}" onerror="this.parentElement.innerHTML='<div class=no-img>🐟</div><span class=stock-badge ${p.stock ? 'in' : 'out'}>${p.stock ? 'In Stock' : 'Sold Out'}</span>'" />` : '<div class="no-img">🐟</div>'}
+          <span class="stock-badge ${p.stock ? 'in' : 'out'}">${p.stock ? 'In Stock' : 'Sold Out'}</span>
+        </div>
+        <div class="card-body">
+          <div class="card-name">${p.name}</div>
+          <div class="card-desc">${p.description}</div>
+          <div class="card-footer">
+            <div class="price">₹${p.price} <span>/ pair</span></div>
+            <button class="btn-buy" ${!p.stock ? 'disabled' : ''} onclick="event.stopPropagation();openModal(${p.id})">${p.stock ? 'Buy Now' : 'Sold Out'}</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    renderPagination();
+  }
+
+  function renderPagination() {
+    const total = Math.ceil(filtered.length / PER_PAGE);
+    if (total <= 1) { document.getElementById('pagination').innerHTML = ''; return; }
+    let html = `<button class="page-btn" onclick="renderPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
+    for (let i = 1; i <= total; i++) {
+      html += `<button class="page-btn ${i===currentPage?'active':''}" onclick="renderPage(${i})">${i}</button>`;
+    }
+    html += `<button class="page-btn" onclick="renderPage(${currentPage+1})" ${currentPage===total?'disabled':''}>›</button>`;
+    document.getElementById('pagination').innerHTML = html;
+  }
+
+  function openModal(id) {
+    const p = allProducts.find(x => x.id === id);
+    if (!p) return;
+    document.getElementById('modalName').textContent = p.name;
+    document.getElementById('modalPrice').textContent = '₹' + p.price + ' / pair';
+    document.getElementById('modalDesc').textContent = p.description;
+    document.getElementById('modalEnquire').onclick = () => {
+      const msg = encodeURIComponent(`Hi! I'm interested in ${p.name} (₹${p.price}). Is it available?`);
+      window.open(`https://wa.me/?text=${msg}`, '_blank');
+    };
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+
+  function closeModal(e) {
+    if (e.target === document.getElementById('modalOverlay')) closeModalDirect();
+  }
+  function closeModalDirect() {
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+
+  loadProducts();
+</script>
+</body>
+</html>
